@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { useEffect, useState } from "react";
 
-export const RegistrationScreen = () => {
+const RegistrationScreen = () => {
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
   const [photo, setPhoto] = useState(null);
 
@@ -43,18 +43,18 @@ export const RegistrationScreen = () => {
               <View>
                 <Image source={{ uri: photo }} style={styles.userImage} />
                 <Image
-                  source={require("../img/deleteIcon.png")}
+                  source={require("../../img/deleteIcon.png")}
                   style={styles.userIcon}
                 />
               </View>
             ) : (
               <View>
                 <Image
-                  source={require("../img/userPhotoPlacholder.jpg")}
+                  source={require("../../img/userPhotoPlacholder.jpg")}
                   style={styles.userImage}
                 />
                 <Image
-                  source={require("../img/addIcon.png")}
+                  source={require("../../img/addIcon.png")}
                   style={styles.userIcon}
                 />
               </View>
@@ -68,6 +68,7 @@ export const RegistrationScreen = () => {
             maxLength={16}
             placeholder="Логін"
             placeholderTextColor="#bdbdbd"
+            keyboardAppearance="light"
             style={styles.textInput}
           />
         </View>
@@ -77,6 +78,8 @@ export const RegistrationScreen = () => {
             maxLength={16}
             placeholder="Адреса електронної пошти"
             placeholderTextColor="#bdbdbd"
+            keyboardAppearance="light"
+            keyboardType="email-address"
             style={styles.textInput}
           />
         </View>
@@ -98,6 +101,7 @@ export const RegistrationScreen = () => {
             placeholder="Пароль"
             placeholderTextColor="#bdbdbd"
             secureTextEntry={true}
+            keyboardAppearance="light"
             style={styles.textInput}
           />
           <TouchableOpacity>
@@ -121,7 +125,9 @@ export const RegistrationScreen = () => {
   );
 };
 
-export const styles = StyleSheet.create({
+export default RegistrationScreen;
+
+const styles = StyleSheet.create({
   inputContainer: {
     width: "100%",
     paddingTop: 92,
@@ -146,10 +152,8 @@ export const styles = StyleSheet.create({
     borderColor: "#e8e8e8",
     backgroundColor: "#f6f6f6",
   },
-
   textInput: {
     padding: 16,
-
     fontSize: 16,
     lineHeight: 18.75,
     color: "#212121",

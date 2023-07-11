@@ -1,14 +1,14 @@
+import { useEffect, useState } from "react";
 import {
   Keyboard,
   Text,
   TextInput,
   TouchableOpacity,
   View,
+  StyleSheet,
 } from "react-native";
-import { styles } from "./RegistrationScreen";
-import { useEffect, useState } from "react";
 
-export const LoginScreen = () => {
+const LoginScreen = () => {
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
 
   useEffect(() => {
@@ -33,7 +33,7 @@ export const LoginScreen = () => {
   }, []);
 
   return (
-    <View style={[styles.inputContainer, { paddingTop: 32 }]}>
+    <View style={styles.inputContainer}>
       <Text style={[styles.title]}>Увійти</Text>
       <View style={styles.inputBox}>
         <TextInput
@@ -79,7 +79,7 @@ export const LoginScreen = () => {
           </TouchableOpacity>
 
           <TouchableOpacity style={{ marginBottom: 45 }}>
-            <Text style={[styles.checkAccountText, { paddingBottom: 111 }]}>
+            <Text style={styles.checkAccountText}>
               Немає акаунту? Зареєструватися
             </Text>
           </TouchableOpacity>
@@ -88,3 +88,65 @@ export const LoginScreen = () => {
     </View>
   );
 };
+
+export default LoginScreen;
+
+const styles = StyleSheet.create({
+  inputContainer: {
+    width: "100%",
+    paddingTop: 32,
+    paddingRight: 16,
+    paddingLeft: 16,
+    borderTopRightRadius: 25,
+    borderTopLeftRadius: 25,
+    backgroundColor: "#ffffff",
+  },
+  title: {
+    marginBottom: 32,
+    fontSize: 30,
+    fontWeight: 500,
+    lineHeight: 35.16,
+    textAlign: "center",
+    color: "#212121",
+  },
+  inputBox: {
+    marginBottom: 16,
+    borderWidth: 1,
+    borderRadius: 8,
+    borderColor: "#e8e8e8",
+    backgroundColor: "#f6f6f6",
+  },
+  textInput: {
+    padding: 16,
+    fontSize: 16,
+    lineHeight: 18.75,
+    color: "#212121",
+  },
+  textShowPassword: {
+    fontSize: 16,
+    lineHeight: 18.75,
+    color: "#1b4371",
+    textAlign: "right",
+  },
+  registerBtnWrapper: {
+    padding: 16,
+    marginBottom: 16,
+    borderRadius: 100,
+    backgroundColor: "#ff6c00",
+  },
+  registerBtnText: {
+    fontSize: 16,
+    fontWeight: 400,
+    lineHeight: 18.75,
+    textAlign: "center",
+    color: "#ffffff",
+  },
+  checkAccountText: {
+    paddingBottom: 111,
+    fontSize: 16,
+    fontWeight: 400,
+    lineHeight: 18.75,
+    textAlign: "center",
+    color: "#1b4371",
+  },
+});

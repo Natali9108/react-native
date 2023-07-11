@@ -1,9 +1,9 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View, SafeAreaView, ImageBackground } from "react-native";
 import { useFonts } from "expo-font";
-import { RegistrationScreen } from "./src/Screens/RegistrationScreen";
-import { LoginScreen } from "./src/Screens/LoginScreen";
-import BgImage from "./src/img/bgImg.png";
+import RegistrationScreen from "./src/Screens/RegistrationScreen";
+import LoginScreen from "./src/Screens/LoginScreen";
+import BgImage from "./img/bgImg.png";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -24,8 +24,8 @@ export default function App() {
           resizeMode="cover"
           style={styles.image}
         >
-          <RegistrationScreen />
-          {/* <LoginScreen /> */}
+          {/* <RegistrationScreen /> */}
+          <LoginScreen />
         </ImageBackground>
       </View>
     </SafeAreaView>
