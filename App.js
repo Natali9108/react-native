@@ -16,7 +16,7 @@ export default function App() {
   // }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={styles.safeAreaContainer}>
       <StatusBar currentHeight={44} />
       <View accessibilityIgnoresInvertColors={true} style={styles.container}>
         <ImageBackground
@@ -24,8 +24,8 @@ export default function App() {
           resizeMode="cover"
           style={styles.image}
         >
-          {/* <RegistrationScreen /> */}
-          <LoginScreen />
+          <RegistrationScreen />
+          {/* <LoginScreen /> */}
         </ImageBackground>
       </View>
     </SafeAreaView>
@@ -33,6 +33,7 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
+  safeAreaContainer: { flex: 1 },
   container: {
     flex: 1,
     width: "100%",

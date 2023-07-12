@@ -8,10 +8,12 @@ import {
   Image,
 } from "react-native";
 import { useEffect, useState } from "react";
+import { Ionicons, AntDesign } from "@expo/vector-icons";
 
 const RegistrationScreen = () => {
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
   const [photo, setPhoto] = useState(null);
+  const [isFocused, setIsFocused] = useState(null);
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -34,6 +36,10 @@ const RegistrationScreen = () => {
     };
   }, []);
 
+  const handleFocus = (inputName) => {
+    setIsFocused(inputName);
+  };
+
   return (
     <>
       <View style={styles.inputContainer}>
@@ -42,8 +48,10 @@ const RegistrationScreen = () => {
             {photo ? (
               <View>
                 <Image source={{ uri: photo }} style={styles.userImage} />
-                <Image
-                  source={require("../../img/deleteIcon.png")}
+                <AntDesign
+                  name="closecircleo"
+                  size={25}
+                  color="#e8e8e8"
                   style={styles.userIcon}
                 />
               </View>
@@ -53,8 +61,10 @@ const RegistrationScreen = () => {
                   source={require("../../img/userPhotoPlacholder.jpg")}
                   style={styles.userImage}
                 />
-                <Image
-                  source={require("../../img/addIcon.png")}
+                <Ionicons
+                  name="ios-add-circle-outline"
+                  size={25}
+                  color="#ff6c00"
                   style={styles.userIcon}
                 />
               </View>
@@ -62,49 +72,54 @@ const RegistrationScreen = () => {
           </TouchableOpacity>
         </View>
         <Text style={styles.title}>Реєстрація</Text>
-        <View style={styles.inputBox}>
-          <TextInput
-            autoFocus={true}
-            maxLength={16}
-            placeholder="Логін"
-            placeholderTextColor="#bdbdbd"
-            keyboardAppearance="light"
-            style={styles.textInput}
-          />
-        </View>
-        <View style={styles.inputBox}>
-          <TextInput
-            autoFocus={true}
-            maxLength={16}
-            placeholder="Адреса електронної пошти"
-            placeholderTextColor="#bdbdbd"
-            keyboardAppearance="light"
-            keyboardType="email-address"
-            style={styles.textInput}
-          />
-        </View>
 
-        <View
+        <TextInput
+          name="name"
+          autoFocus={true}
+          maxLength={16}
+          placeholder="Логін"
+          placeholderTextColor="#bdbdbd"
+          keyboardAppearance="light"
+          onFocus={() => handleFocus("name")}
+          onBlur={() => handleFocus(null)}
           style={[
-            styles.inputBox,
-            {
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-              marginBottom: 43,
-              paddingRight: 16,
-            },
+            styles.textInput,
+            isFocused === "name" ? styles.textInputFocus : null,
           ]}
-        >
+        />
+
+        <TextInput
+          name="email"
+          autoFocus={true}
+          maxLength={16}
+          placeholder="Адреса електронної пошти"
+          placeholderTextColor="#bdbdbd"
+          keyboardAppearance="light"
+          keyboardType="email-address"
+          onFocus={() => handleFocus("email")}
+          onBlur={() => handleFocus(null)}
+          style={[
+            styles.textInput,
+            isFocused === "email" ? styles.textInputFocus : null,
+          ]}
+        />
+
+        <View>
           <TextInput
+            name="password"
             maxLength={16}
             placeholder="Пароль"
             placeholderTextColor="#bdbdbd"
             secureTextEntry={true}
             keyboardAppearance="light"
-            style={styles.textInput}
+            onFocus={() => handleFocus("password")}
+            onBlur={() => handleFocus(null)}
+            style={[
+              styles.textInput,
+              isFocused === "password" ? styles.textInputFocus : null,
+            ]}
           />
-          <TouchableOpacity>
+          <TouchableOpacity style={styles.showPasswordWrapper}>
             <Text style={styles.textShowPassword}>Показати</Text>
           </TouchableOpacity>
         </View>
@@ -115,7 +130,7 @@ const RegistrationScreen = () => {
               <Text style={styles.registerBtnText}>Зареєструватися</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={{ marginBottom: 45 }}>
+            <TouchableOpacity style={styles.checkAccountWrapper}>
               <Text style={styles.checkAccountText}>Вже є акаунт? Увійти</Text>
             </TouchableOpacity>
           </>
@@ -131,8 +146,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     width: "100%",
     paddingTop: 92,
-    paddingRight: 16,
-    paddingLeft: 16,
+    paddingHorizontal: 16,
     borderTopRightRadius: 25,
     borderTopLeftRadius: 25,
     backgroundColor: "#ffffff",
@@ -145,19 +159,23 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#212121",
   },
-  inputBox: {
+
+  textInput: {
+    borderColor: "#e8e8e8",
+    backgroundColor: "#f6f6f6",
     marginBottom: 16,
     borderWidth: 1,
     borderRadius: 8,
-    borderColor: "#e8e8e8",
-    backgroundColor: "#f6f6f6",
-  },
-  textInput: {
     padding: 16,
     fontSize: 16,
     lineHeight: 18.75,
     color: "#212121",
   },
+  textInputFocus: {
+    borderColor: "#ff6c00",
+    backgroundColor: "#fff",
+  },
+  showPasswordWrapper: { position: "absolute", top: 22, right: 16 },
   textShowPassword: {
     fontSize: 16,
     lineHeight: 18.75,
@@ -177,6 +195,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#ffffff",
   },
+  checkAccountWrapper: { marginBottom: 45 },
   checkAccountText: {
     fontSize: 16,
     fontWeight: 400,
