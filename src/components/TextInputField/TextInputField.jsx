@@ -33,7 +33,6 @@ export const TextInputField = ({ name, control, ...rest }) => {
 
 const styles = StyleSheet.create({
   input: {
-    height: 60,
     borderColor: "#e8e8e8",
     backgroundColor: "#f6f6f6",
     borderWidth: 1,

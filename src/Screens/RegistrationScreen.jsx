@@ -1,40 +1,56 @@
 import {
-  Text,
-  TouchableOpacity,
   View,
+  Text,
   StyleSheet,
+  TouchableOpacity,
   KeyboardAvoidingView,
 } from "react-native";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import FormButton from "../components/FormButton";
+import UserImage from "../components/UserImage";
 import TextComponent from "../components/Text";
+import FormButton from "../components/FormButton";
 import { TextInputField } from "../components/TextInputField/TextInputField";
-import { loginUserSchema, useShowPassword } from "../helpers";
+import { registerUserSchema, useShowPassword } from "../helpers";
 
-const LoginScreen = () => {
+const RegistrationScreen = () => {
   const { showPassword, togglePassword } = useShowPassword();
+
   const {
     control,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(loginUserSchema) });
+  } = useForm({ resolver: yupResolver(registerUserSchema) });
 
-  const onSubmit = ({ email, password }) => {
-    console.log({ email: email, password: password });
+  const onSubmit = ({ name, email, password }) => {
+    console.log({ name: name, email: email, password: password });
     reset();
   };
 
   return (
-    <View style={styles.inputContainer}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS == "ios" ? "padding" : "height"}
-      >
-        <Text style={[styles.title]}>Увійти</Text>
+    <KeyboardAvoidingView
+      behavior={Platform.OS == "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={50}
+    >
+      <View style={styles.inputContainer}>
+        <UserImage />
+        <Text style={styles.title}>Реєстрація</Text>
 
         <View>
+          <TextInputField
+            name="name"
+            control={control}
+            maxLength={16}
+            placeholder="Логін"
+            placeholderTextColor="#bdbdbd"
+            keyboardAppearance="light"
+          />
+          <TextComponent
+            text={errors.name?.message}
+            color="#ff0000"
+          ></TextComponent>
           <TextInputField
             name="email"
             control={control}
@@ -72,29 +88,21 @@ const LoginScreen = () => {
           </View>
         </View>
 
-        <FormButton
-          onPress={handleSubmit(onSubmit)}
-          text="Увійти"
-          color="#fffff"
-        />
+        <FormButton text="Зареєструватися" onPress={handleSubmit(onSubmit)} />
         <TouchableOpacity style={styles.checkAccountWrapper}>
-          <TextComponent
-            text="Немає акаунту? Зареєструватися"
-            color="#1b4371"
-          />
+          <TextComponent text={"Вже є акаунт? Увійти"} color="#1b4371" />
         </TouchableOpacity>
-      </KeyboardAvoidingView>
-    </View>
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 
-export default LoginScreen;
+export default RegistrationScreen;
 
 const styles = StyleSheet.create({
   inputContainer: {
     width: "100%",
-    height: 500,
-    paddingTop: 32,
+    paddingTop: 92,
     paddingHorizontal: 16,
     borderTopRightRadius: 25,
     borderTopLeftRadius: 25,
