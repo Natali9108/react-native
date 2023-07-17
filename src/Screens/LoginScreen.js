@@ -28,10 +28,10 @@ const LoginScreen = () => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS == "ios" ? "padding" : "height"}
-    >
-      <View style={styles.inputContainer}>
+    <View style={styles.inputContainer}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
+      >
         <Text style={[styles.title]}>Увійти</Text>
 
         <View>
@@ -83,8 +83,8 @@ const LoginScreen = () => {
             color="#1b4371"
           />
         </TouchableOpacity>
-      </View>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </View>
   );
 };
 
