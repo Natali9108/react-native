@@ -1,96 +1,90 @@
-import { useEffect, useState } from "react";
 import {
-  Keyboard,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
   StyleSheet,
+  KeyboardAvoidingView,
 } from "react-native";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+import FormButton from "../components/FormButton";
+import TextComponent from "../components/Text";
+import { TextInputField } from "../components/TextInputField/TextInputField";
+import { loginUserSchema, useShowPassword } from "../helpers";
 
 const LoginScreen = () => {
-  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
-  const [isFocused, setIsFocused] = useState(null);
+  const { showPassword, togglePassword } = useShowPassword();
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(loginUserSchema) });
 
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      "keyboardDidShow",
-      () => {
-        setIsKeyboardOpen(true);
-      }
-    );
-
-    const keyboardDidHideListener = Keyboard.addListener(
-      "keyboardDidHide",
-      () => {
-        setIsKeyboardOpen(false);
-      }
-    );
-
-    return () => {
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, []);
-
-  const handleFocus = (inputName) => {
-    setIsFocused(inputName);
+  const onSubmit = ({ email, password }) => {
+    console.log({ email: email, password: password });
+    reset();
   };
 
   return (
-    <View style={styles.inputContainer}>
-      <Text style={[styles.title]}>Увійти</Text>
+    <KeyboardAvoidingView
+      behavior={Platform.OS == "ios" ? "padding" : "height"}
+    >
+      <View style={styles.inputContainer}>
+        <Text style={[styles.title]}>Увійти</Text>
 
-      <TextInput
-        name="email"
-        autoFocus={true}
-        maxLength={16}
-        placeholder="Адреса електронної пошти"
-        placeholderTextColor="#bdbdbd"
-        keyboardAppearance="light"
-        keyboardType="email-address"
-        onFocus={() => handleFocus("email")}
-        onBlur={() => handleFocus(null)}
-        style={[
-          styles.textInput,
-          isFocused === "email" ? styles.textInputFocus : null,
-        ]}
-      />
+        <View>
+          <TextInputField
+            name="email"
+            control={control}
+            maxLength={30}
+            placeholder="Адреса електронної пошти"
+            placeholderTextColor="#bdbdbd"
+            keyboardAppearance="light"
+            keyboardType="email-address"
+          />
+          <TextComponent
+            text={errors.email?.message}
+            color="#ff0000"
+          ></TextComponent>
+          <View>
+            <TextInputField
+              name="password"
+              control={control}
+              placeholder="Пароль"
+              placeholderTextColor="#bdbdbd"
+              secureTextEntry={showPassword}
+              keyboardAppearance="light"
+            />
+            <TextComponent
+              text={errors.password?.message}
+              color="#ff0000"
+            ></TextComponent>
+            <TouchableOpacity
+              onPress={togglePassword}
+              style={styles.showPasswordWrapper}
+            >
+              <Text style={styles.textShowPassword}>
+                {showPassword ? "Показати" : "Приховати"}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
 
-      <View>
-        <TextInput
-          name="password"
-          maxLength={16}
-          placeholder="Пароль"
-          placeholderTextColor="#bdbdbd"
-          secureTextEntry={true}
-          keyboardAppearance="light"
-          onFocus={() => handleFocus("password")}
-          onBlur={() => handleFocus(null)}
-          style={[
-            styles.textInput,
-            isFocused === "email" ? styles.textInputFocus : null,
-          ]}
+        <FormButton
+          onPress={handleSubmit(onSubmit)}
+          text="Увійти"
+          color="#fffff"
         />
-        <TouchableOpacity style={styles.showPasswordWrapper}>
-          <Text style={styles.textShowPassword}>Показати</Text>
+        <TouchableOpacity style={styles.checkAccountWrapper}>
+          <TextComponent
+            text="Немає акаунту? Зареєструватися"
+            color="#1b4371"
+          />
         </TouchableOpacity>
       </View>
-
-      {!isKeyboardOpen && (
-        <>
-          <TouchableOpacity style={styles.registerBtnWrapper}>
-            <Text style={styles.registerBtnText}>Зареєструватися</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.checkAccountWrapper}>
-            <Text style={styles.checkAccountText}>
-              Немає акаунту? Зареєструватися
-            </Text>
-          </TouchableOpacity>
-        </>
-      )}
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -99,6 +93,7 @@ export default LoginScreen;
 const styles = StyleSheet.create({
   inputContainer: {
     width: "100%",
+    height: 500,
     paddingTop: 32,
     paddingHorizontal: 16,
     borderTopRightRadius: 25,
@@ -113,22 +108,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#212121",
   },
-
-  textInput: {
-    padding: 16,
-    fontSize: 16,
-    lineHeight: 18.75,
-    color: "#212121",
-    marginBottom: 16,
-    borderWidth: 1,
-    borderRadius: 8,
-    borderColor: "#e8e8e8",
-    backgroundColor: "#f6f6f6",
-  },
-  textInputFocus: {
-    borderColor: "#ff6c00",
-    backgroundColor: "#fff",
-  },
   showPasswordWrapper: { position: "absolute", top: 22, right: 16 },
   textShowPassword: {
     fontSize: 16,
@@ -136,26 +115,5 @@ const styles = StyleSheet.create({
     color: "#1b4371",
     textAlign: "right",
   },
-  registerBtnWrapper: {
-    padding: 16,
-    marginBottom: 16,
-    borderRadius: 100,
-    backgroundColor: "#ff6c00",
-  },
-  registerBtnText: {
-    fontSize: 16,
-    fontWeight: 400,
-    lineHeight: 18.75,
-    textAlign: "center",
-    color: "#ffffff",
-  },
   checkAccountWrapper: { marginBottom: 45 },
-  checkAccountText: {
-    paddingBottom: 111,
-    fontSize: 16,
-    fontWeight: 400,
-    lineHeight: 18.75,
-    textAlign: "center",
-    color: "#1b4371",
-  },
 });

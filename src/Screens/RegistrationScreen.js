@@ -2,141 +2,96 @@ import {
   View,
   Text,
   StyleSheet,
-  TextInput,
   TouchableOpacity,
-  Keyboard,
-  Image,
+  KeyboardAvoidingView,
 } from "react-native";
-import { useEffect, useState } from "react";
-import { Ionicons, AntDesign } from "@expo/vector-icons";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+import UserImage from "../components/UserImage";
+import TextComponent from "../components/Text";
+import FormButton from "../components/FormButton";
+import { TextInputField } from "../components/TextInputField/TextInputField";
+import { registerUserSchema, useShowPassword } from "../helpers";
 
 const RegistrationScreen = () => {
-  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
-  const [photo, setPhoto] = useState(null);
-  const [isFocused, setIsFocused] = useState(null);
+  const { showPassword, togglePassword } = useShowPassword();
 
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      "keyboardDidShow",
-      () => {
-        setIsKeyboardOpen(true);
-      }
-    );
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(registerUserSchema) });
 
-    const keyboardDidHideListener = Keyboard.addListener(
-      "keyboardDidHide",
-      () => {
-        setIsKeyboardOpen(false);
-      }
-    );
-
-    return () => {
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, []);
-
-  const handleFocus = (inputName) => {
-    setIsFocused(inputName);
+  const onSubmit = ({ name, email, password }) => {
+    console.log({ name: name, email: email, password: password });
+    reset();
   };
 
   return (
-    <>
-      <View style={styles.inputContainer}>
-        <View style={styles.imageContainer}>
-          <TouchableOpacity>
-            {photo ? (
-              <View>
-                <Image source={{ uri: photo }} style={styles.userImage} />
-                <AntDesign
-                  name="closecircleo"
-                  size={25}
-                  color="#e8e8e8"
-                  style={styles.userIcon}
-                />
-              </View>
-            ) : (
-              <View>
-                <Image
-                  source={require("../../img/userPhotoPlacholder.jpg")}
-                  style={styles.userImage}
-                />
-                <Ionicons
-                  name="ios-add-circle-outline"
-                  size={25}
-                  color="#ff6c00"
-                  style={styles.userIcon}
-                />
-              </View>
-            )}
-          </TouchableOpacity>
-        </View>
-        <Text style={styles.title}>Реєстрація</Text>
-
-        <TextInput
-          name="name"
-          autoFocus={true}
-          maxLength={16}
-          placeholder="Логін"
-          placeholderTextColor="#bdbdbd"
-          keyboardAppearance="light"
-          onFocus={() => handleFocus("name")}
-          onBlur={() => handleFocus(null)}
-          style={[
-            styles.textInput,
-            isFocused === "name" ? styles.textInputFocus : null,
-          ]}
-        />
-
-        <TextInput
-          name="email"
-          autoFocus={true}
-          maxLength={16}
-          placeholder="Адреса електронної пошти"
-          placeholderTextColor="#bdbdbd"
-          keyboardAppearance="light"
-          keyboardType="email-address"
-          onFocus={() => handleFocus("email")}
-          onBlur={() => handleFocus(null)}
-          style={[
-            styles.textInput,
-            isFocused === "email" ? styles.textInputFocus : null,
-          ]}
-        />
-
+    <View style={styles.inputContainer}>
+      <UserImage />
+      <Text style={styles.title}>Реєстрація</Text>
+      <KeyboardAvoidingView
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
+      >
         <View>
-          <TextInput
-            name="password"
+          <TextInputField
+            name="name"
+            control={control}
             maxLength={16}
-            placeholder="Пароль"
+            placeholder="Логін"
             placeholderTextColor="#bdbdbd"
-            secureTextEntry={true}
             keyboardAppearance="light"
-            onFocus={() => handleFocus("password")}
-            onBlur={() => handleFocus(null)}
-            style={[
-              styles.textInput,
-              isFocused === "password" ? styles.textInputFocus : null,
-            ]}
           />
-          <TouchableOpacity style={styles.showPasswordWrapper}>
-            <Text style={styles.textShowPassword}>Показати</Text>
-          </TouchableOpacity>
+          <TextComponent
+            text={errors.name?.message}
+            color="#ff0000"
+          ></TextComponent>
+          <TextInputField
+            name="email"
+            control={control}
+            maxLength={30}
+            placeholder="Адреса електронної пошти"
+            placeholderTextColor="#bdbdbd"
+            keyboardAppearance="light"
+            keyboardType="email-address"
+          />
+          <TextComponent
+            text={errors.email?.message}
+            color="#ff0000"
+          ></TextComponent>
+          <View>
+            <TextInputField
+              name="password"
+              control={control}
+              placeholder="Пароль"
+              placeholderTextColor="#bdbdbd"
+              secureTextEntry={showPassword}
+              keyboardAppearance="light"
+            />
+            <TextComponent
+              text={errors.password?.message}
+              color="#ff0000"
+            ></TextComponent>
+            <TouchableOpacity
+              onPress={togglePassword}
+              style={styles.showPasswordWrapper}
+            >
+              <Text style={styles.textShowPassword}>
+                {showPassword ? "Показати" : "Приховати"}
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
-        {!isKeyboardOpen && (
-          <>
-            <TouchableOpacity style={styles.registerBtnWrapper}>
-              <Text style={styles.registerBtnText}>Зареєструватися</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.checkAccountWrapper}>
-              <Text style={styles.checkAccountText}>Вже є акаунт? Увійти</Text>
-            </TouchableOpacity>
-          </>
-        )}
-      </View>
-    </>
+        <FormButton text="Зареєструватися" onPress={handleSubmit(onSubmit)} />
+        <TouchableOpacity style={styles.checkAccountWrapper}>
+          <TextComponent text={"Вже є акаунт? Увійти"} color="#1b4371" />
+        </TouchableOpacity>
+      </KeyboardAvoidingView>
+    </View>
   );
 };
 
@@ -145,6 +100,7 @@ export default RegistrationScreen;
 const styles = StyleSheet.create({
   inputContainer: {
     width: "100%",
+    height: 650,
     paddingTop: 92,
     paddingHorizontal: 16,
     borderTopRightRadius: 25,
@@ -159,22 +115,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#212121",
   },
-
-  textInput: {
-    borderColor: "#e8e8e8",
-    backgroundColor: "#f6f6f6",
-    marginBottom: 16,
-    borderWidth: 1,
-    borderRadius: 8,
-    padding: 16,
-    fontSize: 16,
-    lineHeight: 18.75,
-    color: "#212121",
-  },
-  textInputFocus: {
-    borderColor: "#ff6c00",
-    backgroundColor: "#fff",
-  },
   showPasswordWrapper: { position: "absolute", top: 22, right: 16 },
   textShowPassword: {
     fontSize: 16,
@@ -182,44 +122,5 @@ const styles = StyleSheet.create({
     color: "#1b4371",
     textAlign: "right",
   },
-  registerBtnWrapper: {
-    padding: 16,
-    marginBottom: 16,
-    borderRadius: 100,
-    backgroundColor: "#ff6c00",
-  },
-  registerBtnText: {
-    fontSize: 16,
-    fontWeight: 400,
-    lineHeight: 18.75,
-    textAlign: "center",
-    color: "#ffffff",
-  },
   checkAccountWrapper: { marginBottom: 45 },
-  checkAccountText: {
-    fontSize: 16,
-    fontWeight: 400,
-    lineHeight: 18.75,
-    textAlign: "center",
-    color: "#1b4371",
-  },
-  imageContainer: {
-    position: "absolute",
-    left: "50%",
-    top: 0,
-    marginLeft: -50,
-    marginTop: -50,
-  },
-  userImage: {
-    width: 120,
-    height: 120,
-    borderRadius: 16,
-  },
-  userIcon: {
-    width: 25,
-    height: 25,
-    position: "absolute",
-    bottom: 14,
-    right: -11,
-  },
 });
