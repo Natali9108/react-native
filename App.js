@@ -1,15 +1,8 @@
 import { StatusBar } from "expo-status-bar";
-import {
-  StyleSheet,
-  SafeAreaView,
-  ImageBackground,
-  TouchableWithoutFeedback,
-  Keyboard,
-} from "react-native";
+import { StyleSheet, SafeAreaView } from "react-native";
 import { useFonts } from "expo-font";
 import RegistrationScreen from "./src/Screens/RegistrationScreen";
 import LoginScreen from "./src/Screens/LoginScreen";
-import BgImage from "./src/assets/img/bgImg.png";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -22,30 +15,20 @@ export default function App() {
   // }
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <SafeAreaView
-        accessibilityIgnoresInvertColors={true}
-        style={styles.safeAreaContainer}
-      >
-        <ImageBackground
-          source={BgImage}
-          resizeMode="cover"
-          style={styles.image}
-        >
-          <RegistrationScreen />
-          {/* <LoginScreen /> */}
-        </ImageBackground>
-        <StatusBar />
-      </SafeAreaView>
-    </TouchableWithoutFeedback>
+    <SafeAreaView
+      accessibilityIgnoresInvertColors={true}
+      style={styles.safeAreaContainer}
+    >
+      {/* <RegistrationScreen /> */}
+      <LoginScreen />
+
+      <StatusBar />
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  safeAreaContainer: { flex: 1, justifyContent: "flex-end" },
-
-  image: {
+  safeAreaContainer: {
     flex: 1,
-    justifyContent: "flex-end",
   },
 });

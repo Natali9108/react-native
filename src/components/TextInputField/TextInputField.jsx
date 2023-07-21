@@ -4,6 +4,7 @@ import { StyleSheet, TextInput, View } from "react-native";
 
 export const TextInputField = ({ name, control, ...rest }) => {
   const [isFocused, setIsFocused] = useState(null);
+
   const handleFocus = (inputName) => {
     setIsFocused(inputName);
   };
