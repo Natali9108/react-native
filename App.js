@@ -19,8 +19,8 @@ export default function App() {
       accessibilityIgnoresInvertColors={true}
       style={styles.safeAreaContainer}
     >
-      {/* <RegistrationScreen /> */}
-      <LoginScreen />
+      <RegistrationScreen />
+      {/* <LoginScreen /> */}
 
       <StatusBar />
     </SafeAreaView>
