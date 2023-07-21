@@ -14,7 +14,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import UserImage from "../components/UserImage";
 import TextComponent from "../components/Text";
 import FormButton from "../components/FormButton";
-import { TextInputField } from "../components/TextInputField/TextInputField";
+import { TextInputField } from "../components/TextInputField";
 import { registerUserSchema, useShowPassword } from "../helpers";
 import BgImage from "../assets/img/bgImg.png";
 
@@ -34,7 +34,7 @@ const RegistrationScreen = () => {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss()}>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView
         behavior={Platform.OS == "ios" ? "padding" : "height"}
         keyboardVerticalOffset={-150}

@@ -13,7 +13,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 import FormButton from "../components/FormButton";
 import TextComponent from "../components/Text";
-import { TextInputField } from "../components/TextInputField/TextInputField";
+import { TextInputField } from "../components/TextInputField";
 import BgImage from "../assets/img/bgImg.png";
 import { loginUserSchema, useShowPassword } from "../helpers";
 
@@ -32,7 +32,7 @@ const LoginScreen = () => {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss()}>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView
         behavior={Platform.OS == "ios" ? "padding" : "height"}
         keyboardVerticalOffset={-150}
