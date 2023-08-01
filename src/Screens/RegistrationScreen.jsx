@@ -8,6 +8,7 @@ import {
   Keyboard,
   ImageBackground,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
@@ -19,6 +20,7 @@ import { registerUserSchema, useShowPassword } from "../helpers";
 import BgImage from "../assets/img/bgImg.png";
 
 const RegistrationScreen = () => {
+  const navigation = useNavigation();
   const { showPassword, togglePassword } = useShowPassword();
 
   const {
@@ -28,8 +30,13 @@ const RegistrationScreen = () => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(registerUserSchema) });
 
-  const onSubmit = ({ name, email, password }) => {
-    console.log({ name: name, email: email, password: password });
+  const onSubmit = (user) => {
+    console.log({
+      name: user.name,
+      email: user.email,
+      password: user.password,
+    });
+    navigation.navigate("Home");
     reset();
   };
 
@@ -37,7 +44,7 @@ const RegistrationScreen = () => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView
         behavior={Platform.OS == "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={-150}
+        keyboardVerticalOffset={-230}
         style={styles.container}
       >
         <ImageBackground
@@ -103,7 +110,10 @@ const RegistrationScreen = () => {
               text="Зареєструватися"
               onPress={handleSubmit(onSubmit)}
             />
-            <TouchableOpacity style={styles.checkAccountWrapper}>
+            <TouchableOpacity
+              style={styles.checkAccountWrapper}
+              onPress={() => navigation.navigate("Login")}
+            >
               <TextComponent text={"Вже є акаунт? Увійти"} color="#1b4371" />
             </TouchableOpacity>
           </View>

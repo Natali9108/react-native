@@ -8,6 +8,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
@@ -18,6 +19,7 @@ import BgImage from "../assets/img/bgImg.png";
 import { loginUserSchema, useShowPassword } from "../helpers";
 
 const LoginScreen = () => {
+  const navigation = useNavigation();
   const { showPassword, togglePassword } = useShowPassword();
   const {
     control,
@@ -28,6 +30,9 @@ const LoginScreen = () => {
 
   const onSubmit = ({ email, password }) => {
     console.log({ email: email, password: password });
+    navigation.navigate("Home", {
+      screen: "PostsScreen",
+    });
     reset();
   };
 
@@ -35,7 +40,7 @@ const LoginScreen = () => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView
         behavior={Platform.OS == "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={-150}
+        keyboardVerticalOffset={-145}
         style={styles.container}
       >
         <ImageBackground
@@ -89,7 +94,10 @@ const LoginScreen = () => {
               text="Увійти"
               color="#fffff"
             />
-            <TouchableOpacity style={styles.checkAccountWrapper}>
+            <TouchableOpacity
+              style={styles.checkAccountWrapper}
+              onPress={() => navigation.navigate("Registration")}
+            >
               <TextComponent
                 text="Немає акаунту? Зареєструватися"
                 color="#1b4371"
