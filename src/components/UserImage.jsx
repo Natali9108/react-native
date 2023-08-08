@@ -11,6 +11,7 @@ const UserImage = () => {
         {photo ? (
           <View>
             <Image source={{ uri: photo }} style={styles.userImage} />
+
             <AntDesign
               name="closecircleo"
               size={25}
@@ -51,6 +52,7 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     borderRadius: 16,
+    resizeMode: "cover",
   },
   userIcon: {
     width: 25,

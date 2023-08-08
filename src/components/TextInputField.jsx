@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Controller } from "react-hook-form";
-import { StyleSheet, TextInput, View } from "react-native";
+import { StyleSheet, TextInput } from "react-native";
 
 export const TextInputField = ({ name, control, ...rest }) => {
   const [isFocused, setIsFocused] = useState(null);

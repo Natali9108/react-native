@@ -1,7 +1,9 @@
 import { StyleSheet, Text } from "react-native";
 
-const TextComponent = ({ text, color }) => {
-  return <Text style={[styles.text, { color: color }]}>{text}</Text>;
+const TextComponent = ({ text, color, ...otherProps }) => {
+  return (
+    <Text style={[styles.text, { color: color, ...otherProps }]}>{text}</Text>
+  );
 };
 
 export default TextComponent;
