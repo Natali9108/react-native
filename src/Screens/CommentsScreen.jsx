@@ -1,75 +1,20 @@
-import { useState } from "react";
 import {
   SafeAreaView,
   View,
-  Text,
   Image,
   StyleSheet,
   TouchableOpacity,
   FlatList,
-  TextInput,
 } from "react-native";
 import { useForm } from "react-hook-form";
-import { nanoid } from "nanoid";
 
 import { TextInputField } from "../components/TextInputField";
 import { Ionicons } from "@expo/vector-icons";
-import { formatCurrentDate } from "../helpers";
-import image1 from "../assets/img/userAvatar.png";
-import image2 from "../assets/img/userAvatar_.png";
+import renderCommentItem from "../components/render/renderCommentItem";
+import { commentsData } from "../data";
 
-const data = [
-  {
-    id: "1",
-    image: image1,
-    title:
-      "Really love your most recent photo. I’ve been trying to capture the same thing for a few months and would love some tips!",
-  },
-  {
-    id: "2",
-    image: image2,
-    title:
-      "A fast 50mm like f1.8 would help with the bokeh. I’ve been using primes as they tend to get a bit sharper images.",
-  },
-  {
-    id: "3",
-    image: image1,
-    title: "Thank you! That was very helpful!",
-  },
-  {
-    id: "5",
-    image: image1,
-    title:
-      "Really love your most recent photo. I’ve been trying to capture the same thing for a few months and would love some tips!",
-  },
-  {
-    id: "6",
-    image: image1,
-    title:
-      "Really love your most recent photo. I’ve been trying to capture the same thing for a few months and would love some tips!",
-  },
-  {
-    id: "7",
-    image: image1,
-    title:
-      "Really love your most recent photo. I’ve been trying to capture the same thing for a few months and would love some tips!",
-  },
-];
-const renderItem = ({ item, navigation }) => {
-  return (
-    <View style={styles.commentItem}>
-      <Image source={item.image} style={styles.userAvatar} />
-      <View style={styles.commentWrapper}>
-        <Text style={styles.commentText}>{item.title}</Text>
-        <Text style={styles.date}>{formatCurrentDate()}</Text>
-      </View>
-    </View>
-  );
-};
-
-const CommentsScreen = ({ route, navigation }) => {
+const CommentsScreen = ({ route }) => {
   const { image } = route.params;
-  const [comments, setComments] = useState([]);
 
   const {
     control,
@@ -78,14 +23,8 @@ const CommentsScreen = ({ route, navigation }) => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = ({ comment }) => {
-    const uniqueId = Math.random().toString(36).substring(2, 15);
-    const newComment = {
-      id: uniqueId,
-      image: image1,
-      title: comment,
-    };
-    setComments((state) => [...state, newComment]);
+  const onSubmit = (data) => {
+    console.log(data);
 
     reset();
   };
@@ -96,10 +35,10 @@ const CommentsScreen = ({ route, navigation }) => {
 
       <SafeAreaView style={{ flex: 1 }}>
         <FlatList
-          data={comments}
-          renderItem={({ item }) => renderItem({ item })}
+          data={commentsData}
+          renderItem={({ item }) => renderCommentItem({ item })}
           keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.flatListContent}
+          // contentContainerStyle={styles.flatListContent}
         />
       </SafeAreaView>
 
@@ -165,44 +104,5 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: "15%",
     alignItems: "center",
-  },
-
-  flatListContent: {
-    // marginRight: 16,
-    // paddingHorizontal: 16,
-  },
-  userAvatar: {
-    height: 28,
-    width: 28,
-    borderRadius: 50,
-  },
-  commentItem: {
-    flexDirection: "row",
-    gap: 32,
-    marginBottom: 24,
-  },
-
-  commentWrapper: {
-    padding: 16,
-    borderTopLeftRadius: 0,
-    borderTopRightRadius: 6,
-    borderBottomLeftRadius: 6,
-    borderBottomRightRadius: 6,
-    backgroundColor: "rgba(0, 0, 0, 0.03)",
-    width: 299,
-  },
-  commentText: {
-    marginBottom: 6,
-    color: "#212121",
-    fontSize: 13,
-    fontWeight: 400,
-    lineHeight: 18,
-    flexShrink: 0,
-  },
-  date: {
-    color: "#BDBDBD",
-    textAlign: "right",
-    fontSize: 10,
-    fontWeight: 400,
   },
 });

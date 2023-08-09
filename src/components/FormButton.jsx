@@ -1,11 +1,15 @@
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, TouchableOpacity, Pressable } from "react-native";
 import TextComponent from "./Text";
 
-const FormButton = ({ onPress, text }) => {
+const FormButton = ({ onPress, text, disabled, backgroundColor, color }) => {
   return (
-    <TouchableOpacity onPress={onPress} style={styles.btnContainer}>
-      <TextComponent text={text} color="#ffffff" />
-    </TouchableOpacity>
+    <Pressable
+      onPress={onPress}
+      disabled={disabled}
+      style={[styles.btnContainer, { backgroundColor: backgroundColor }]}
+    >
+      <TextComponent text={text} color={color} />
+    </Pressable>
   );
 };
 
@@ -13,9 +17,9 @@ export default FormButton;
 
 const styles = StyleSheet.create({
   btnContainer: {
-    padding: 16,
+    paddingVertical: 19,
+    paddingHorizontal: 32,
     marginBottom: 16,
     borderRadius: 100,
-    backgroundColor: "#ff6c00",
   },
 });

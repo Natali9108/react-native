@@ -12,8 +12,8 @@ const MainNavigator = () => {
 
   return (
     <NavigationContainer>
-      <MainStack.Navigator initialRouteName="PostsScreen">
-        {/* <MainStack.Screen
+      <MainStack.Navigator initialRouteName="Login">
+        <MainStack.Screen
           name="Registration"
           component={RegistrationScreen}
           options={{ headerShown: false }}
@@ -22,7 +22,7 @@ const MainNavigator = () => {
           name="Login"
           component={LoginScreen}
           options={{ headerShown: false }}
-        /> */}
+        />
         <MainStack.Screen
           name="Home"
           component={TabBottomNavigator}

@@ -25,8 +25,8 @@ const LoginScreen = () => {
     control,
     handleSubmit,
     reset,
-    formState: { errors },
-  } = useForm({ resolver: yupResolver(loginUserSchema) });
+    formState: { isValid, errors },
+  } = useForm({ mode: "onTouched", resolver: yupResolver(loginUserSchema) });
 
   const onSubmit = ({ email, password }) => {
     console.log({ email: email, password: password });
@@ -92,7 +92,9 @@ const LoginScreen = () => {
             <FormButton
               onPress={handleSubmit(onSubmit)}
               text="Увійти"
-              color="#fffff"
+              disabled={!isValid}
+              backgroundColor={!isValid ? "#f6f6f6" : "#ff6c00"}
+              color={!isValid ? "#bdbdbd" : "#fff"}
             />
             <TouchableOpacity
               style={styles.checkAccountWrapper}

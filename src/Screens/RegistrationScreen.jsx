@@ -27,8 +27,8 @@ const RegistrationScreen = () => {
     control,
     handleSubmit,
     reset,
-    formState: { errors },
-  } = useForm({ resolver: yupResolver(registerUserSchema) });
+    formState: { isValid, errors },
+  } = useForm({ mode: "onChange", resolver: yupResolver(registerUserSchema) });
 
   const onSubmit = (user) => {
     console.log({
@@ -109,6 +109,9 @@ const RegistrationScreen = () => {
             <FormButton
               text="Зареєструватися"
               onPress={handleSubmit(onSubmit)}
+              disabled={!isValid}
+              backgroundColor={!isValid ? "#f6f6f6" : "#ff6c00"}
+              color={!isValid ? "#bdbdbd" : "#fff"}
             />
             <TouchableOpacity
               style={styles.checkAccountWrapper}
